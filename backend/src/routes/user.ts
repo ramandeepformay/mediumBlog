@@ -4,6 +4,8 @@ import { withAccelerate } from '@prisma/extension-accelerate'
 import { decode, sign, verify } from 'hono/jwt'
 import { signUpSchema } from "ramandeep-formay-medium";
 import { signInSchema } from "ramandeep-formay-medium";
+import { hashing } from "../utils/hashing";
+
 const app = new Hono<{
     Bindings: {
         DATABASE_URL: string,
@@ -25,11 +27,15 @@ app.post("/signup", async (c) => {
             c.status(403)
             return c.json({ error: "Invalid Signup Data" })
         }
+        // hashing
+        const securedPassword = await hashing(body.password);
+
+        // user creation
         const user = await prisma.user.create({
             data: {
                 name: body.name,
                 username: body.username,
-                password: body.password
+                password: securedPassword
             }
         })
 
@@ -56,19 +62,23 @@ app.post("/signin", async (c) => {
             c.status(403)
             return c.json({ error: "Invalid Signin Data" })
         }
-        const user = await prisma.user.findUnique({
+        const user =  prisma.user.findUnique({
             where: {
                 username: body.username,
-                password: body.password
+                password: body.password,
             }
-
         })
+        const userId = await user;
+        
         if (!user) {
             c.status(403)
             return c.json({ error: "User not found" })
         }
-        const token = await sign({ id: user.id }, c.env.JWT_SECRET)
-        return c.json({ token })
+        if(user!==null){
+            const token = await sign({ id: userId }, c.env.JWT_SECRET)
+            return c.json({ token })
+        }
+        
     }
     catch (e) {
         console.error(e)
