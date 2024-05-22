@@ -1,21 +1,24 @@
 import Appbar from "../components/Appbar";
 import BlogCard from "../components/BlogCard";
 import { useBlogs } from "../hooks";
-
+import BlogsSkelton from "../components/BlogsSkeleton";
 
 const blogs = () => {
     const { loading, blogs } = useBlogs();
 
     if (loading) {
         return <div>
-            loading...
+            <BlogsSkelton />
         </div>
-
     }
+
     return <>
         {/* appbar component */}
-        <div>
-            <Appbar authorName={blogs[blogs.length-1].author.name.toLocaleUpperCase()} />
+        <div>{
+            blogs.length > 0 &&
+            <Appbar authorName={blogs[blogs.length - 1].author.name.toLocaleUpperCase()} />
+        }
+
         </div>
 
         {/* blogs mapping */}
@@ -30,7 +33,9 @@ const blogs = () => {
                     id={blog.id}
                 />)}
             </div>
+
         </div>
+
     </>
 }
 
