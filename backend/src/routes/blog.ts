@@ -10,7 +10,7 @@ const app = new Hono<{
         DATABASE_URL: string,
         JWT_SECRET: string
     }, Variables: {
-        userId: string
+        userId: number
     }
 }>();
 
@@ -21,6 +21,7 @@ app.use("/*", async (c, next) => {
         datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate())
     try {
+        // split token
         const jwt = c.req.header("Authorization") || "";
         console.log(jwt)
         const token = jwt.split(" ")[1];
@@ -29,6 +30,7 @@ app.use("/*", async (c, next) => {
             c.status(401);
             return c.json({ error: "unauthorized" });
         }
+        // payload data
         const payload = await verify(token, c.env.JWT_SECRET)
         c.set("userId", payload.id)
         await next()
@@ -36,7 +38,7 @@ app.use("/*", async (c, next) => {
         c.status(403)
         return c.json("error")
     }
-})
+}) 
 
 // create blog
 app.post("/", async (c) => {
@@ -45,9 +47,9 @@ app.post("/", async (c) => {
     }).$extends(withAccelerate())
     try {
         const body = await c.req.json();
-        const userId = parseInt(c.get("userId"))
+        const userId = c.get("userId");
         const { success } = blogCreateSchema.safeParse(body)
-        console.log(success, body, userId)
+       
         if (!success) {
             c.status(403);
             return c.json({ error: "Invalid data to create post" })
@@ -58,8 +60,7 @@ app.post("/", async (c) => {
                 content: body.content,
                 authorId: userId
             }
-        })
-        console.log(blog)
+        }) 
         return c.json({
             id: blog.id
         })
@@ -105,13 +106,13 @@ app.get("/bulk", async (c) => {
     }).$extends(withAccelerate())
     try {
         const blogs = await prisma.blog.findMany({
-            select:{
+            select: {
                 id: true,
                 title: true,
                 content: true,
-                author:{
-                    select:{
-                        name:true
+                author: {
+                    select: {
+                        name: true
                     }
                 }
             }
@@ -135,13 +136,13 @@ app.get("/:id", async (c) => {
             where: {
                 id: Number(param)
             },
-            select:{
-                id:true,
-                content:true,
-                title:true,
-                author:{
-                    select:{
-                        name:true
+            select: {
+                id: true,
+                content: true,
+                title: true,
+                author: {
+                    select: {
+                        name: true
                     }
                 }
             }

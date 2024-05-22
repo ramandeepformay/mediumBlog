@@ -9,7 +9,7 @@ const Appbar = ({authorName}:{authorName:string}) => {
     const toggle =() =>{
         setVisible(!visible)
     }
-    return <div>
+    return <>
         <div className="flex justify-between mx-4 p-4 border-b-2 mb-4">
             <Link to={"/blogs"}>
                 <div className="text-2xl font-semibold">
@@ -31,7 +31,7 @@ const Appbar = ({authorName}:{authorName:string}) => {
 
             </div>
         </div>
-    </div>
+    </>
 }
 
 export default Appbar;

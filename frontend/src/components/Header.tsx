@@ -1,4 +1,4 @@
-import { Link,  } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 interface headerLabelType{
     headline:string,
@@ -13,7 +13,7 @@ const Header = ({headline, description, link, linkType}:headerLabelType) =>{
                 {headline}
             </div>
             <div className="text-slate-400">
-                {description} <Link to={linkType} className="underline ">{link}</Link>
+                {description} <Link to={linkType} className="underline">{link}</Link>
             </div>
         </div>
     </>

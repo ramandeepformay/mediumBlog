@@ -14,21 +14,27 @@ const AuthSignup = () => {
         username: "",
         password: ""
     })
-    const sendRequest = async () =>{
-        try{
+    const [loading, setLoading] = useState(false);
+    // sending the req to backend
+    const sendRequest = async () => {
+        setLoading(true)
+        try {
+            setTimeout(() => {
+                setLoading(false)
+            }, 3000)
             const response = await axios.post(`${BACKEND_URL_USER}/signup`, postInputs)
             const jwt = await response.data.token
+
             console.log(jwt)
             localStorage.setItem("token", jwt)
             navigate("/blogs")
-        }catch(e){
+
+        } catch (e) {
             alert("Error while sign up")
         }
-        
     }
 
-    return <div>
-        {JSON.stringify(postInputs)}
+    return <>
         <div className=" max-w-2xl h-screen mx-auto flex flex-col justify-center">
             <div className="max-w-xl mx-10">
                 <div>
@@ -43,15 +49,16 @@ const AuthSignup = () => {
                         }))
                     }} />
                 </div>
+
                 <div>
                     <InputBox label="Email" placeholder="m@type.com" onChange={(e) => {
                         setPostInputs((c) => ({
                             ...c,
                             username: e.target.value
-
                         }))
                     }} />
                 </div>
+
                 <div>
                     <InputBox label="Password" placeholder="Password" onChange={(e) => {
                         setPostInputs((c) => ({
@@ -60,14 +67,13 @@ const AuthSignup = () => {
                         }))
                     }} />
                 </div>
+
                 <div>
-                    <Button label="Signup" onClick ={sendRequest}/>
+                    <Button label="Signup" onClick={sendRequest} loading={loading} />
                 </div>
-
             </div>
-
         </div>
-    </div>
+    </>
 }
 
 export default AuthSignup;
