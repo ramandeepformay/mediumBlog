@@ -2,22 +2,22 @@ import Appbar from "./Appbar";
 import { Avatar } from "./BlogCard";
 
 const DetailBlog = ({ blog }: any) => {
-    { console.log(blog.author.name.toUpperCase()) }
+
     return <div>
         <div>
-            <Appbar authorName={blog.author.name} />
+            <Appbar authorName={upperCaseConverter(blog.author.name) || ""} />
         </div>
 
         <div className="grid grid-cols-12 w-full px-10 p-12">
             <div className="col-span-8 ">
                 <div className="font-extrabold text-5xl">
-                    {blog.title}
+                    {upperCaseConverter(blog.title)}
                 </div>
                 <div className="text-slate-400">
                     Posted on 23rd Dec
                 </div>
                 <div className="pt-4">
-                    {blog.content}
+                    {upperCaseConverter(blog.content)}
                 </div>
             </div>
             <div className="col-span-4 ">
@@ -31,7 +31,7 @@ const DetailBlog = ({ blog }: any) => {
                     </div>
                    <div className="ml-4">
                         <div className="text-2xl font-extrabold">
-                            {blog.title}
+                            {upperCaseConverter(blog.title)}
                         </div>
                         <div className="text-slate-300">
                             Random phrase
@@ -44,6 +44,12 @@ const DetailBlog = ({ blog }: any) => {
         </div>
 
     </div>
+}
+
+const upperCaseConverter =(label:string) =>{
+    if(label.length>0){
+        return label[0].toUpperCase()+label.slice(1);
+    }
 }
 
 export default DetailBlog;

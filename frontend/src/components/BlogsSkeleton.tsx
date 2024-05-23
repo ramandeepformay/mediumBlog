@@ -1,6 +1,4 @@
-import { useState } from "react";
-import Appbar from "./Appbar";
-import { useBlogs } from "../hooks";
+
 
 
 const BlogsSkelton = () => {

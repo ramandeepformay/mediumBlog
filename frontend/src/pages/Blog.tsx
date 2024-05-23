@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom"
 import { useSingleBlog } from "../hooks"
 import DetailBlog from "../components/DetailBlog"
-
+import DetailBlogSkeleton from "../components/DetailBlogSkeleton"
 
 const Blog = () => {
     const { id } = useParams()
@@ -9,7 +9,7 @@ const Blog = () => {
     const { loading, blog } = useSingleBlog({id:id || ""})
     if (loading) {
         return <div>
-            Loading..
+            <DetailBlogSkeleton/>
         </div>
     }
     return <div>
