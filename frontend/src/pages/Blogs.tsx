@@ -2,10 +2,13 @@ import Appbar from "../components/Appbar";
 import BlogCard from "../components/BlogCard";
 import { useBlogs } from "../hooks";
 import BlogsSkelton from "../components/BlogsSkeleton";
+import { useLocation } from 'react-router-dom'
 
 const blogs = () => {
     const { loading, blogs } = useBlogs();
-
+    const location = useLocation();
+    const name = location.state.name;
+    console.log(name)
     if (loading) {
         return <div>
             <BlogsSkelton />
@@ -16,7 +19,7 @@ const blogs = () => {
         {/* appbar component */}
         <div>{
             blogs.length > 0 &&
-            <Appbar authorName={blogs[blogs.length - 1].author.name.toLocaleUpperCase()} />
+            <Appbar authorName={name.toUpperCase()} />
         }
 
         </div>

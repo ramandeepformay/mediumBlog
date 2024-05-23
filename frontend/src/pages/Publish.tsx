@@ -2,16 +2,19 @@ import { ChangeEvent, useState } from "react";
 import Appbar from "../components/Appbar";
 import axios from "axios";
 import { BACKEND_URL_BLOG } from "../config";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 
 const Publish = () => {
     const [title, setTitle] = useState("")
     const [content, setContent] = useState("")
     const navigate =useNavigate()
+    const location = useLocation();
+    const name = location.state;
+    console.log(name)
     return <div>
         <div>
-            <Appbar authorName="yo"/>
+            <Appbar authorName=""/>
         </div>
         <div>
             <div className=" mt-16 mb-6 flex flex-col justify-center items-center w-full">
