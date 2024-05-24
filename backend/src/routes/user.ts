@@ -40,7 +40,7 @@ app.post("/signup", async (c) => {
         })
 
         const token = await sign({ id: user.id }, c.env.JWT_SECRET)
-        return c.json({ token })
+        return c.json({ token, name: body.name })
     }
     catch (e) {
         console.error(e)
@@ -51,40 +51,37 @@ app.post("/signup", async (c) => {
 
 // signin
 app.post("/signin", async (c) => {
+
     const prisma = new PrismaClient({
-        datasourceUrl: c.env.DATABASE_URL
-    })
-        .$extends(withAccelerate())
+        datasourceUrl: c.env?.DATABASE_URL,
+    }).$extends(withAccelerate());
     try {
-        const body = await c.req.json()
+        const body = await c.req.json();
         const { success } = signInSchema.safeParse(body)
         if (!success) {
             c.status(403)
             return c.json({ error: "Invalid Signin Data" })
         }
-        const user =  prisma.user.findUnique({
+        const user = await prisma.user.findUnique({
             where: {
                 username: body.username,
-                password: body.password,
+                password: body.passowrd
             }
-        })
-        const userId = await user;
-        
+        });
+
         if (!user) {
-            c.status(403)
-            return c.json({ error: "User not found" })
+            c.status(403);
+            return c.json({ error: "user not found" });
         }
-        if(user!==null){
-            const token = await sign({ id: userId }, c.env.JWT_SECRET)
-            return c.json({ token })
-        }
-        
-    }
-    catch (e) {
+
+        const token = await sign({ id: user.id }, c.env.JWT_SECRET);
+        return c.json({ token, name:user.name });
+    } catch (e) {
         console.error(e)
         c.status(403)
         c.json({ error: "Error while signing in" })
     }
+
 
 })
 
