@@ -24,7 +24,9 @@ const AuthSignin = () => {
             }, 5000)
             const response = await axios.post(`${BACKEND_URL_USER}/signin`, postInputs)
             const jwt = await response.data.token
+            const name = await response.data.name
             localStorage.setItem("token", jwt)
+            localStorage.setItem("name", name)
             navigate("/blogs")
 
         } catch (error) {

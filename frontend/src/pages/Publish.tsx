@@ -2,19 +2,19 @@ import { ChangeEvent, useState } from "react";
 import Appbar from "../components/Appbar";
 import axios from "axios";
 import { BACKEND_URL_BLOG } from "../config";
-import { useLocation, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 
 
 const Publish = () => {
     const [title, setTitle] = useState("")
     const [content, setContent] = useState("")
     const navigate =useNavigate()
-    const location = useLocation();
-    const name = location.state;
-    console.log(name)
+    const name = localStorage.getItem("name") || "";
+
+    
     return <div>
         <div>
-            <Appbar authorName=""/>
+            <Appbar authorName={name[0].toUpperCase()}/>
         </div>
         <div>
             <div className=" mt-16 mb-6 flex flex-col justify-center items-center w-full">

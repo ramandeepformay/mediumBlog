@@ -5,7 +5,7 @@ import InputBox from "./inputBox";
 import { SignUpSchema } from "ramandeep-formay-medium";
 import axios from "axios";
 import { BACKEND_URL_USER } from "../config";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const AuthSignup = () => {
     const navigate = useNavigate();
@@ -24,10 +24,10 @@ const AuthSignup = () => {
             }, 3000)
             const response = await axios.post(`${BACKEND_URL_USER}/signup`, postInputs)
             const jwt = await response.data.token
-
-            console.log(jwt)
+            const name = await response.data.name
             localStorage.setItem("token", jwt)
-            navigate("/blogs", { state: { name: postInputs.name }})
+            localStorage.setItem("name", name)
+            navigate("/blogs")
 
         } catch (e) {
             alert("Error while sign up")
@@ -35,7 +35,7 @@ const AuthSignup = () => {
     }
 
     return <>
-        {console.log(postInputs.name)}
+   
         <div className=" max-w-2xl h-screen mx-auto flex flex-col justify-center">
             <div className="max-w-xl mx-10">
                 <div>
@@ -68,9 +68,7 @@ const AuthSignup = () => {
                         }))
                     }} />
                 </div>
-                <Link to={"/publish"} state={{name:postInputs.name}}>
                 
-                </Link>
                 <div>
                     <Button label="Signup" onClick={sendRequest} loading={loading} />
                 </div>

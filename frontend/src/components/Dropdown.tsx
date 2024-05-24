@@ -5,6 +5,7 @@ const Dropdown =({isVisible}:{isVisible:boolean}) =>{
     const navigate = useNavigate();
     const handleSignout = () => { 
         localStorage.setItem("token", "");
+        localStorage.setItem("name","");
         navigate("/signin")
 
     }
